@@ -33,9 +33,14 @@
     border-color: #230052;
   }
   .formbtn {
-      background-color:#7419eb;
-      border-radius: 10px;
-      padding: 8px;
-      color: whitesmoke;
-     
+    padding: 8px;
+    margin: 6px auto;
+    border-radius: 8px;
+    color: indigo;
+    border: 2px solid indigo;
+    font-weight: bolder;
   }
+  .formbtn:hover {
+    background-color: rgb(218, 128, 240);
+    cursor: pointer;
+}

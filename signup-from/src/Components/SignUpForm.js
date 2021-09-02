@@ -1,4 +1,6 @@
 import React ,{useRef}from 'react'
+import * as yup from 'yup';
+import {formValidation} from '../Validations/FormValidation'
 import axios from 'axios'
 import style from './SignupForm.module.css'
 
@@ -7,26 +9,36 @@ function SignUpForm(props) {
     const emailRef = useRef('');
     const passwordRef = useRef('');
 
-    const formHandler = (event) => {
+    const formHandler = async (event) => {
         event.preventDefault();
         const userData = {
             name : nameRef.current.value,
             email : emailRef.current.value,
             password : passwordRef.current.value
         }
-        console.log('user data ',userData);      
+        const formIsValid = await formValidation.isValid(userData);
+        console.log("form valid :", formIsValid)
+        
+        if (formIsValid) {
+            await axios.post("http://localhost:4000/user/signup", userData)
+                .then(res => { console.log("response of signup form", res) })
+                .catch(err => { console.log('error in posting user data', err) })
 
-        axios.post("http://localhost:4000/user/signup", userData) 
-        .then(res => { console.log("response of signup form", res)})
-        .catch( err => { console.log('error in posting user data', err)})
+            // clearing the inputs
+            nameRef.current.value = '';
+            emailRef.current.value = '';
+            passwordRef.current.value = '';
+        }
+        else {
+            alert('please fill all the feild correctly')
+        }       
 
-        // clearing the inputs
-        nameRef.current.value = '';
-        emailRef.current.value = '';
-        passwordRef.current.value = '';
+    
     }
     return (
         <div className={style.AddSignUpForm}>
+            <h2 style={{color:'whitesmoke' ,fontWeight : 'bolder' }}>Sign UP Form</h2>
+            
             <form onSubmit={formHandler}>
                 <div className={style.control}>
                     <label htmlFor='name'>Name</label>

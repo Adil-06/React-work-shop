@@ -1,0 +1,62 @@
+.allUserDiv{
+    background-color: rgb(165, 164, 164);
+    border: 1px solid gainsboro;
+    border-radius: 15px;
+    padding: 10px;
+   
+    margin: 10px;
+    box-shadow: 2px 2px  gray;
+}
+.allUserDiv h2 {
+    color: indigo;
+    font-weight: 700;
+    text-decoration: underline;
+}
+.UserList{
+    background-color: whitesmoke;
+    padding: 10px;
+    margin: 5px 8rem;
+    border: 1px solid indigo;
+    width: 80%;
+    border-radius: 10px;
+    box-shadow: 2px 2px whitesmoke;
+   
+}
+.UserList ul {
+    list-style: none;
+}
+.UserList li {
+    border: 1px solid indigo;
+    border-radius:  5px;
+    padding: 7px;
+    margin: 5px;
+    box-shadow: 2px 2px rgb(161, 161, 240);
+    color: indigo;
+    font-weight: 700;
+    text-align: left;
+    
+}
+.deletebtn {
+    padding: 6px;
+    margin-left: 1rem;
+    border-radius: 8px;
+    color: indigo;
+    border: 1px solid indigo;
+    font-weight: bolder;
+}
+.deletebtn:hover {
+    background-color: rgb(218, 128, 240);
+    cursor: pointer;
+}
+.getUserbtn{
+    padding: 8px;
+    margin: 6px auto;
+    border-radius: 8px;
+    color: indigo;
+    border: 2px solid indigo;
+    font-weight: bolder;
+}
+.getUserbtn:hover {
+    background-color: rgb(218, 128, 240);
+    cursor: pointer;
+}
