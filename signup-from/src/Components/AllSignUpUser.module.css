@@ -60,3 +60,17 @@
     background-color: rgb(218, 128, 240);
     cursor: pointer;
 }
+.editbtn {
+    margin-right: 4rem;
+    margin-top: 1px;
+    float: right;
+    border: 1px solid indigo;
+    padding: 5px;
+    cursor: pointer;
+    border-radius: 8px;
+
+}
+.editEmailArea{
+    display: flex;
+    justify-items: center;
+}

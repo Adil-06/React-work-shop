@@ -1,10 +1,9 @@
 import React ,{useRef}from 'react'
-import * as yup from 'yup';
 import {formValidation} from '../Validations/FormValidation'
-import axios from 'axios'
+import SignUpApiServices from '../Api/ApiServices'
 import style from './SignupForm.module.css'
 
-function SignUpForm(props) {
+const SignUpForm = (props) => {
     const nameRef = useRef('');
     const emailRef = useRef('');
     const passwordRef = useRef('');
@@ -19,21 +18,18 @@ function SignUpForm(props) {
         const formIsValid = await formValidation.isValid(userData);
         console.log("form valid :", formIsValid)
         
-        if (formIsValid) {
-            await axios.post("http://localhost:4000/user/signup", userData)
-                .then(res => { console.log("response of signup form", res) })
-                .catch(err => { console.log('error in posting user data', err) })
-
-            // clearing the inputs
-            nameRef.current.value = '';
-            emailRef.current.value = '';
-            passwordRef.current.value = '';
-        }
-        else {
-            alert('please fill all the feild correctly')
-        }       
-
-    
+      if (formIsValid) {
+        await SignUpApiServices.createAPI(userData)
+          .then(res => { console.log("response of signup form", res) })
+          .catch(err => { console.log('error in posting user data', err) })
+        // clearing the inputs
+        nameRef.current.value = '';
+        emailRef.current.value = '';
+        passwordRef.current.value = '';
+      }
+      else {
+        alert('please fill all the feild correctly')
+      }    
     }
     return (
         <div className={style.AddSignUpForm}>
