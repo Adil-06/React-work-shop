@@ -1,5 +1,5 @@
 import React ,{useState}from 'react'
-import { Button, Checkbox, Form, Input, DatePicker } from 'antd';
+import { Button,  Form, Input, DatePicker } from 'antd';
 import 'antd/dist/antd.css';
 
 function AntDesignForm() {

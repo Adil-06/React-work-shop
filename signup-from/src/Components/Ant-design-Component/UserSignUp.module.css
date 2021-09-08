@@ -1,0 +1,17 @@
+.mainContainer {    
+    padding: 1rem;
+    margin: 1rem;
+    background-color: lightgrey;
+    border-radius: 10px;
+    box-shadow: 2px 3px lightslategray;
+}
+
+
+.mainContainer form {
+    margin-left: 10rem;
+}
+.mainContainer  form label {
+    color: #1890ff;
+    font-weight: 800;
+    font-size: large;
+}

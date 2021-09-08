@@ -51,11 +51,9 @@ const AllSignUpUser = () => {
     }     
       await SignUpApiServices.putAPI(id, updatedEmail)
         .then(res => { console.log('updated email', res) })
-        .catch(err => { console.log('error in updating email', err) })
-  
+        .catch(err => { console.log('error in updating email', err) })  
       GetUserHandler();
-      setEditFeild(false);    
-     
+      setEditFeild(false);     
   }
   return (
     <React.Fragment>
@@ -69,7 +67,7 @@ const AllSignUpUser = () => {
         <div className={style.UserList}>
           {!showUser && <ul>
             {users.map((user) => (
-              <li key={user.id}> Name : {user.name.toUpperCase()} {'\n'}
+              <li key={user.id}> Name : {user.name} {'\n'}
                 ---- Email: {user.email}
                 <DeleteUser id={user.id} onRemove={deleteHandler} />
                 <span className={style.editbtn} onClick={() => HideEmailHandler(user.id)}>Edit </span>

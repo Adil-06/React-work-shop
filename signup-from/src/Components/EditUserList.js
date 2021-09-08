@@ -9,7 +9,7 @@ const EditUserList = (props) => {
     event.preventDefault();
     const email = emailRef.current.value;
 
-    if (email !== null) {
+    if (email) {
       //console.log(emailRef.current.value);
       props.onEditEmail(id, email)
     }

@@ -1,7 +1,8 @@
 import axios from "axios";
 import dotenv from 'dotenv'
 
-dotenv.config()
+dotenv.config();
+console.log(process.env.REACT_APP_URL )
 
 const api = 'http://localhost:4000'
 const getAPI = async () =>  {
