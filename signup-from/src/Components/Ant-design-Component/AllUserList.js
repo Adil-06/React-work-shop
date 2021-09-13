@@ -1,22 +1,26 @@
 import React, { useState, useEffect } from 'react'
-import { Button,  Row, Col, Pagination, List, Typography  } from 'antd';
-import { DeleteOutlined, EditOutlined , UserOutlined, UnorderedListOutlined} from '@ant-design/icons';
+import { Button, Row, Col, Pagination, List, Typography } from 'antd';
+import { DeleteOutlined, EditOutlined, UserOutlined, UnorderedListOutlined } from '@ant-design/icons';
 import EditEmailCard from './EditEmailCard';
 import style from './AllUserList.module.css'
- import SignUpApiServices from '../../Api/ApiServices'
+import SignUpApiServices from '../../Api/ApiServices'
 // import {formValidation} from '../../Validations/FormValidation'
 
 const AllUserList = () => {
-
-  useEffect(() => {  GetUserHandler()  },[]) 
+ 
   const [users, setUsers] = useState([]);
-  const [userId , setUserId] = useState('');
+  const [userId, setUserId] = useState('');
   const [showEditFeild, setEditFeild] = useState(false);
+  const [current, setCurrent] = useState(1)
+  const [limit] = useState(5);
+  const [perPage] = useState(5)
+  const [pageCount, setPageCount] = useState(1)
+  const [skip, setSkip] = useState(1);
 
   const GetUserHandler = async () => {
+    const fetchUserData = [];
     await SignUpApiServices.getAPI()
       .then(res => {
-        const fetchUserData = [];
         const resData = res.data;
         for (const key in resData) {
           fetchUserData.push({
@@ -25,10 +29,20 @@ const AllUserList = () => {
             email: resData[key].email
           })
         }
-        setUsers(fetchUserData);    
-        console.log('users are: ', fetchUserData)
+        const sliceData = fetchUserData.slice(skip - 1, (skip - 1) + limit);
+        setUsers(sliceData);
+        setPageCount(Math.ceil(fetchUserData.length * perPage))
+        console.log("page vount and user length",pageCount, fetchUserData.length)
+        console.log('pagination  users: ', fetchUserData)
       })
-      .catch(err => { console.log('error in getting user', err) })
+      .catch(err => {
+        console.log('pagination error', err)
+      })
+  }
+  const pageHandler = (page) => {
+    console.log('selected page is:',page);
+    setCurrent(page);
+    setSkip(page + 1);
   }
   const deleteHandler = async (id) => {
     //console.log('delete id', id)
@@ -38,8 +52,8 @@ const AllUserList = () => {
     GetUserHandler();
   }
   const EditHandler = async (id) => {
-    console.log("EDIT:", id)    
-      setUserId(id);   
+    console.log("EDIT:", id)
+    setUserId(id);
     setEditFeild(true);
   }
   const EditedEmailHandler = async (id, email) => {
@@ -53,54 +67,56 @@ const AllUserList = () => {
     GetUserHandler();
     setEditFeild(false)
   }
-
+  useEffect(() => {
+    GetUserHandler()
+  }, [skip])
 
   return (
     <div className={style.mainContainer}>
       <Row justify='center'>
         <Col span={20}>
-         <h2 > <span> <UnorderedListOutlined /> </span> User List</h2>
-         </Col>
-         <Col>
-           <Button type= 'primary' size='middle' onClick ={GetUserHandler}
-              icon={<UserOutlined/>} >  Get User List
-           </Button>
-         </Col>
+          <h2 > <span> <UnorderedListOutlined /> </span> User List</h2>
+        </Col>
+        <Col>
+          <Button type='primary' size='middle' onClick={GetUserHandler}
+            icon={<UserOutlined />} >  Get User List
+          </Button>
+        </Col>
       </Row>
-      <Row justify= 'start'>
+      <Row justify='start'>
         {/* for user list */}
         <Col span={18}>
           <List dataSource={users}
-           bordered 
-           renderItem = {
-             (item,index) => (
+            bordered
+            renderItem={
+              (item, index) => (
                 <List.Item>
-                  <Typography.Text keyboard strong> Name: {item.name.toUpperCase()} 
-                   {'\n'} ---- Email: {item.email} </Typography.Text>
+                  <Typography.Text keyboard strong> Name: {item.name.toUpperCase()}
+                    {'\n'} ---- Email: {item.email} </Typography.Text>
                   <Col span={2} offset={10} >
                     <Button type='primary' size='small' onClick={() => deleteHandler(item.id)}
-                     danger icon={<DeleteOutlined />}>  Delete</Button>
+                      danger icon={<DeleteOutlined />}>  Delete</Button>
                   </Col>
                   <Col span={2}>
                     <Button type='primary' size='small' onClick={() => EditHandler(item.id)}
-                     icon={<EditOutlined />} > Edit</Button>
-                  </Col>                                                      
+                      icon={<EditOutlined />} > Edit</Button>
+                  </Col>
                 </List.Item>
-             )
-           } 
-           >           
+              )
+            }
+          >
           </List>
         </Col>
         {/* for edit email */}
         <Col span={4} offset={2}>
-         { showEditFeild && 
-         <EditEmailCard editId = {userId} onEditEmail={EditedEmailHandler}/>
+          {showEditFeild &&
+            <EditEmailCard editId={userId} onEditEmail={EditedEmailHandler} />
           }
         </Col>
         {/* for pagination */}
         <Col span={16} offset={2} >
-          <Pagination defaultCurrent={1} total={100} ></Pagination>  
-        </Col>    
+          <Pagination current={current}  onChange={pageHandler} total={pageCount} />
+        </Col>
       </Row>
 
     </div>
