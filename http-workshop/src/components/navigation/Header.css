@@ -1,0 +1,23 @@
+.navigation {
+    display: flex;
+    justify-content: space-around;
+    margin: 1rem;
+    background-color: cornflowerblue;
+    color: whitesmoke;
+    align-items: center;
+}
+.navigation ul {
+    display: flex;
+    justify-content: space-around;
+    width: 20%;
+    list-style: none;
+    align-items: center;
+    font-weight: bold;
+}
+.linkColor  {
+color: whitesmoke;
+text-decoration: none;
+}
+.linkColor :hover {
+    color: darkblue;
+}
