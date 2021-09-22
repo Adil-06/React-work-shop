@@ -9,8 +9,8 @@ const getAPI = async () =>  {
   return await axios.get(`${process.env.REACT_APP_URL}`);
 }
 // fetch(`/api/users?limit=${limit}&skip=${skip}`)
- const getUsers = async (limit , skip) => {
-   return await axios.get(`${process.env.REACT_APP_URL}/users?limit=${limit}&skip=${skip}`);
+ const getUsers = async (limit , skip, name) => {
+   return await axios.get(`${process.env.REACT_APP_URL}/users?limit=${limit}&skip=${skip}&name=${name}`);
  }
 const getUserByName = async (name) => {
   console.log("get find req" , name)

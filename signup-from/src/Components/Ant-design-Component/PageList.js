@@ -1,33 +1,40 @@
 import React, { useState, useEffect } from 'react'
-import { Pagination, Input, Button, List, Typography } from 'antd'
+import { Pagination, Input, Button, List, Typography, Select } from 'antd'
 import SignUpApiServices from '../../Api/ApiServices'
 
+const { Option } = Select;
 const PageList = () => {
   const [users, setUsers] = useState([]);
   const [current, setCurrent] = useState(1)
-  const [limit] = useState(10);
-  const [pageCount, setPageCount] = useState(1)
-  const [skip, setSkip] = useState(1);
-  const [filterUser, setFilterUser] = useState([])
-
-  const [UserName, setUserName] = useState('')
+  const [limit, setLimit] = useState(5);
+  const [skip, setSkip] = useState(0);
+  const [UserName, setUserName] = useState('');
+  const [total, setTotal] = useState('');
+  const limtiSizes = [5, 8, 10];
+  // const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    fetchUsers(limit, skip)
-  }, [skip]);
+    fetchUsers(limit, skip, UserName);
+  }, [skip, limit]);
   const pageHandler = (page) => {
     // console.log(page);
     setCurrent(page);
-    setSkip(page);
+    setSkip(page - 1);
+  }
+  const handleLimitSizeChange = (e) => {
+    setLimit(e);
+    setCurrent(1);
+    setSkip(0)
   }
 
-  const fetchUsers = async (limit, skip) => {
-    console.log('limit', limit);
-    console.log('skip', skip);
+
+  const fetchUsers = async (limit, skip, UserName) => {
+    console.log('skip limit', skip, limit, UserName);
+    //console.log('username', UserName.length >= 1)
     const fetchUserData = [];
-    await SignUpApiServices.getUsers(limit, skip)
+    await SignUpApiServices.getUsers(limit, skip, UserName)
       .then(res => {
-        const resData = res.data;
+        const resData = res.data.data;
         for (const key in resData) {
           fetchUserData.push({
             id: resData[key]._id,
@@ -35,17 +42,13 @@ const PageList = () => {
             email: resData[key].email
           })
         }
+        console.log('total user', res.data.total)
+        setTotal(res.data.total);
         setUsers(fetchUserData);
-        console.log('pagination  users: ', fetchUserData, pageCount)
+        console.log('users: ', fetchUserData)
       })
       .catch(err => {
         console.log('pagination error', err)
-      })
-    await SignUpApiServices.getAPI()
-      .then(res => {
-        const userLength = res.data.length
-        console.log('user lenght', userLength);
-        setPageCount(Math.ceil(userLength / limit))
       })
   }
   const UserHandler = (event) => {
@@ -53,57 +56,52 @@ const PageList = () => {
     setUserName(UserName)
     //console.log(UserName)
   }
-  const findHandler = async () => {
-    const fetchUserData = [];
-    //console.log(UserName)
-    if (UserName) {
-      await SignUpApiServices.getUserByName(UserName)
-        .then(res => {
-          const resData = res.data;
-          for (const key in resData) {
-            fetchUserData.push({
-              id: resData[key]._id,
-              name: resData[key].name,
-              email: resData[key].email
-            })
-          }
-          console.log('find  users: ', res.data);
-          setFilterUser(fetchUserData);
-        })
-        .catch(err => {
-          console.log('find user name error', err)
-        })
-      setUserName('')
-    }
-    else { alert('please enter name to find')}
+  const SearchHandler = () => {
+    fetchUsers(limit, skip, UserName);
   }
+  const ClearSearchHandler = () => {
+    setUserName('');
+    setCurrent(1);
+    setSkip(0);
+    setLimit(5)
+    fetchUsers(limit, skip, UserName);
+    
+  }
+
+
   return (
     <>
       <h2> pagination list</h2>
       <div>
         <div >
-          <Input type='text' placeholder=" find user" style={{ width: '25%' ,}} required={true}
+          <Input type='text' placeholder=" Find User" style={{ width: '25%' }} required={true}
             value={UserName} onChange={UserHandler} />
-          <Button  style={{ marginLeft:'5px' }} onClick={findHandler}> Search</Button>
-          {filterUser.length > 0 && <List size='small' style={{ width: "25%", margin: "8px auto" }}
-            bordered dataSource={filterUser}
-            renderItem={item => (
-              <List.Item>
-                <Typography.Text mark>NAME: {item.name}</Typography.Text>  {'\n'} Email: {item.email}
-              </List.Item>
-            )}
-          />}
-
-          {users.map((user, index) => (
-            <li key={index} style={{ listStyle: 'none' }}> <b>{user.name} --- {user.email} </b> </li>
-          ))}
+          <Button style={{ marginLeft: '5px' }} disabled={!UserName.length >= 1}
+            onClick={SearchHandler}> Search</Button>
+          <Button style={{ marginLeft: '5px' }} disabled={!UserName.length >= 1} type='primary'
+            onClick={ClearSearchHandler}>Clear Serach</Button>
+          <span > user per page </span>
+          <Select  style={{ width: 60 , marginLeft: 5}} onChange={handleLimitSizeChange} value={limit} >
+          {limtiSizes.map((size) => (
+              <Option key={size} value={size}>
+                {size}
+              </Option>
+            ))}
+          </Select>
+          {users &&
+            <List size='small' style={{ width: "25%", margin: "8px auto" }}
+              bordered dataSource={users}
+              renderItem={item => (
+                <List.Item>
+                  <Typography.Text mark>NAME: {item.name}</Typography.Text>  {'\n'} Email: {item.email}
+                </List.Item>
+              )}
+            />}
         </div>
-        <Pagination current={current} onChange={pageHandler} total={pageCount * 10} />
+        <Pagination current={current} onChange={pageHandler} pageSize={limit} total={total} />
       </div>
-
     </>
   )
 }
-
 
 export default PageList
