@@ -3,18 +3,18 @@ import React from 'react';
 //import AllSignUpUser from './Components/AllSignUpUser';
 //import AntDesignForm from './Components/AntDesignForm';
 import UserSignUp from './Components/Ant-design-Component/UserSignUp';
-import AllUserList from './Components/Ant-design-Component/AllUserList';
-//import PageList from './Components/Ant-design-Component/PageList';
+//import AllUserList from './Components/Ant-design-Component/AllUserList';
+import PageList from './Components/Ant-design-Component/PageList';
 import './App.css';
 
 function App() {
   return (
 
     <div className="App">
-      {/* <PageList /> */}
+      <PageList />
      
       <UserSignUp />
-      <AllUserList/>
+      {/* <AllUserList/> */}
       <br />
 
       {/* <SignUpForm/>  */}

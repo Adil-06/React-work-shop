@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Pagination, Input, Button, List, Typography, Select } from 'antd'
+import { Pagination, Input, Button, List, Typography, Select , Checkbox , DatePicker} from 'antd'
 import SignUpApiServices from '../../Api/ApiServices'
 
 const { Option } = Select;
@@ -67,12 +67,22 @@ const PageList = () => {
     fetchUsers(limit, skip, UserName);
     
   }
+  const checkBoxHandler = (e) => {
+    console.log('checked box',e.target.checked)
+  }
+  const onDateChangeHandler = (date, dateString) => {
+    console.log('Date', date , dateString)
+  }
+
 
 
   return (
     <>
       <h2> pagination list</h2>
       <div>
+        <div style={{padding: 5}}>
+        <DatePicker onChange={onDateChangeHandler}></DatePicker>
+        </div>
         <div >
           <Input type='text' placeholder=" Find User" style={{ width: '25%' }} required={true}
             value={UserName} onChange={UserHandler} />
@@ -93,6 +103,7 @@ const PageList = () => {
               bordered dataSource={users}
               renderItem={item => (
                 <List.Item>
+                 <span> <Checkbox onChange={checkBoxHandler} style={{paddingLeft: 5}}>Checkbox</Checkbox></span>
                   <Typography.Text mark>NAME: {item.name}</Typography.Text>  {'\n'} Email: {item.email}
                 </List.Item>
               )}
