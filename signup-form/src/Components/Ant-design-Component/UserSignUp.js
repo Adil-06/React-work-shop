@@ -1,7 +1,6 @@
 import React, { useRef} from 'react'
 import { Button,  Form, Input , Typography} from 'antd';
 import { FormOutlined } from '@ant-design/icons';
-
 import SignUpApiServices from '../../Api/ApiServices'
 import {formValidation} from '../../Validations/FormValidation'
 import style from './UserSignUp.module.css'

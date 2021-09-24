@@ -23,6 +23,9 @@ const createAPI = async(userData) => {
 const deleteAPI = async (id) => {
     return await axios.delete(`${process.env.REACT_APP_URL}/${id}`)
 }
+const deleteManyAPI = async (data) => {
+  return await axios.delete(`${process.env.REACT_APP_URL}`, data)
+}
 const putAPI = async (id, email) => {
     return await axios.put(`${process.env.REACT_APP_URL}/${id}`, email);
   };
@@ -33,6 +36,7 @@ export default {
     deleteAPI,
     putAPI,
     getUsers,
-    getUserByName
+    getUserByName,
+    deleteManyAPI
 };
 

@@ -11,7 +11,8 @@ const PageList = () => {
   const [UserName, setUserName] = useState('');
   const [total, setTotal] = useState('');
   const limtiSizes = [5, 8, 10];
-  // const [loading, setLoading] = useState(true)
+  const [delUserArray, setDelUserArray] = useState([]);
+  
 
   useEffect(() => {
     fetchUsers(limit, skip, UserName);
@@ -67,8 +68,22 @@ const PageList = () => {
     fetchUsers(limit, skip, UserName);
     
   }
-  const checkBoxHandler = (e) => {
-    console.log('checked box',e.target.checked)
+  const checkBoxHandler = ( id,e) => {
+    if(e.target.checked === true) {
+      setDelUserArray([...delUserArray].concat(id))
+    }
+    console.log(e);
+     console.log('checked box',delUserArray)
+  }
+ 
+  const onDeleteManyHandler = async () => {
+    
+    const removeArray =  delUserArray
+    console.log("delete users list ", removeArray)
+
+    await SignUpApiServices.deleteManyAPI(removeArray)    
+    .then(res => { console.log('response of delete many',res)})
+    .catch(err => {console.log('error in delete many', err.message)})
   }
   const onDateChangeHandler = (date, dateString) => {
     console.log('Date', date , dateString)
@@ -99,16 +114,23 @@ const PageList = () => {
             ))}
           </Select>
           {users &&
-            <List size='small' style={{ width: "25%", margin: "8px auto" }}
+            <List size='small' style={{ width: "35%", margin: "8px auto" }}
               bordered dataSource={users}
-              renderItem={item => (
+              renderItem={(item, index) => (
                 <List.Item>
-                 <span> <Checkbox onChange={checkBoxHandler} style={{paddingLeft: 5}}>Checkbox</Checkbox></span>
+                 <span>
+                    <Checkbox onChange={(e) => checkBoxHandler(item.id , e)} 
+                      style={{ float: 'left'}}> User: {index}
+                    </Checkbox>
+
+                  </span>
                   <Typography.Text mark>NAME: {item.name}</Typography.Text>  {'\n'} Email: {item.email}
                 </List.Item>
               )}
             />}
         </div>
+        <Button size='middle' type='primary' disabled={!delUserArray.length >= 1} onClick={onDeleteManyHandler}>Delete Many</Button>
+      
         <Pagination current={current} onChange={pageHandler} pageSize={limit} total={total} />
       </div>
     </>
