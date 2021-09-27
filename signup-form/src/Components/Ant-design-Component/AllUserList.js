@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Row, Col, Pagination, List, Typography, Input, Select } from 'antd';
+import { Button, Row, Col, Pagination, List, Typography, Input, Select, Popconfirm } from 'antd';
 import { DeleteOutlined, EditOutlined, UserOutlined, UnorderedListOutlined } from '@ant-design/icons';
 import EditEmailCard from './EditEmailCard';
 import style from './AllUserList.module.css'
@@ -64,6 +64,9 @@ const AllUserList = () => {
     setSkip(0)
     setCurrent(1);
   }
+  const onCancelDelete = (e) => {
+    //console.log(e)
+  }
   const EditHandler = async (id) => {
     //console.log("EDIT:", id)
     setUserId(id);
@@ -86,13 +89,13 @@ const AllUserList = () => {
   const SearchHandler = () => {
     GetUserHandler(limit, skip, UserName);
   }
-  const ClearSearchHandler = async() => {
+  const ClearSearchHandler = async () => {
     setUserName('');
     await GetUserHandler(limit, skip, UserName);
     setSkip(0);
     setLimit(5)
     setCurrent(1);
-    
+
   }
   const handleLimitSizeChange = (e) => {
     setLimit(e);
@@ -122,8 +125,8 @@ const AllUserList = () => {
             onClick={SearchHandler}> Search</Button>
           <Button style={{ marginLeft: '5px' }} disabled={!UserName.length >= 1} type='primary'
             onClick={ClearSearchHandler}>Clear Serach</Button>
-          <Select  style={{ width: 60 , marginLeft: 5}} onChange={handleLimitSizeChange} value={limit} >
-          {limtiSizes.map((size) => (
+          <Select style={{ width: 60, marginLeft: 5 }} onChange={handleLimitSizeChange} value={limit} >
+            {limtiSizes.map((size) => (
               <Option key={size} value={size}>
                 {size}
               </Option>
@@ -138,8 +141,14 @@ const AllUserList = () => {
                     <Typography.Text keyboard strong>  Name: {item.name}
                       {'\n'} ---- Email: {item.email} </Typography.Text>
                     <Col span={2} offset={10} >
-                      <Button type='primary' size='small' onClick={() => deleteHandler(item.id)}
-                        danger icon={<DeleteOutlined />}>  Delete</Button>
+                      <Popconfirm title="Are you sure to delete this task?"
+                        onConfirm={() => deleteHandler(item.id)}
+                        onCancel={onCancelDelete}
+                        okText="Yes"
+                        cancelText="No">
+                        <Button type='primary' size='small' 
+                          danger icon={<DeleteOutlined />}>  Delete</Button>
+                      </Popconfirm>
                     </Col>
                     <Col span={2}>
                       <Button type='primary' size='small' onClick={() => EditHandler(item.id)}

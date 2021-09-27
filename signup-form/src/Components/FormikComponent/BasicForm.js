@@ -12,20 +12,18 @@ const BasicForm = () => {
   const [userEmail, setUserEmail] = useState('');
   const [userPassword, setUserPassword] = useState('');
 
-  const onFormSubmit = async (values) => {
+  const onFormSubmit = async (values, {resetForm}) => {
     const formIsValid = await formValidation.isValid(values);
 
     if (formIsValid) {
-      const data = JSON.stringify(values);
-      //alert(data);
       console.log(values);
-      // await SignUpApiServices.createAPI(values)
-      //   .then(res => {
-      //     console.log("response of signup form", res)
-      //     clearState();
-      //   })
-      //   .catch(err => { console.log('error in posting user data', err) })
+      await SignUpApiServices.createAPI(values)
+        .then(res => {
+          console.log("response of signup form", res)
+        })
+        .catch(err => { console.log('error in posting user data', err) })
     }
+    resetForm();
     clearState();
   }
   const clearState = () => {
@@ -47,7 +45,9 @@ const BasicForm = () => {
     <div style={{ marginTop: 5 }}>
 
       <Formik initialValues={{ name: '', email: '', password: '' }}
-        onSubmit={onFormSubmit} validationSchema={formValidation} >
+        onSubmit={(values , {resetForm}) => onFormSubmit(values , {resetForm})}
+         validationSchema={formValidation} 
+         >
         {(errors, touched) => {
           return (
             <Form style={{ width: '30%', margin: " 10px auto" }} >
