@@ -15,7 +15,8 @@ const PageList = () => {
   const [delUserArray, setDelUserArray] = useState([]);
   const [showModel , setShowModel] = useState(false);
   const [editUserData , setEditUserData] = useState([])
-  // const [checked , setChecked] = useState(false);
+   const [isChecked , setChecked] = useState({});
+   const [AllChecked, setAllChecked] = useState(false)
 
 
   useEffect(() => {
@@ -45,7 +46,6 @@ const PageList = () => {
             id: resData[key]._id,
             name: resData[key].name,
             email: resData[key].email,
-            showmodel:true
           })
         }
         console.log('total user', res.data.total)
@@ -78,7 +78,9 @@ const PageList = () => {
       let arr = delUserArray
       arr.push(item.id)
       setDelUserArray([...arr]);
-      console.log('checked box true', delUserArray)
+      setChecked({...isChecked, [e.target.name]: e.target.checked});
+      console.log('checked box true', delUserArray, e.target)
+      console.log('check', isChecked);
     }
     else {
       let removeId = delUserArray.filter(del => del !== item.id)
@@ -93,13 +95,15 @@ const PageList = () => {
       delmany: delUserArray
     }
     console.log("delete users list ", removeArray);
-    await SignUpApiServices.deleteManyAPI(removeArray)
-      .then(res => { console.log('response of delete many', res) })
-      .catch(err => { console.log('error in delete many', err.message) });
+    // await SignUpApiServices.deleteManyAPI(removeArray)
+    //   .then(res => { console.log('response of delete many', res) })
+    //   .catch(err => { console.log('error in delete many', err.message) });
     setCurrent(1);
     setSkip(0);
     setLimit(5)
     fetchUsers(limit, skip, UserName);
+    setChecked({});
+    setDelUserArray([])
   }
 
   const onDateChangeHandler = (date, dateString) => {
@@ -120,9 +124,9 @@ const PageList = () => {
     <>
       <h2> pagination list</h2>
       <div>
-        {/* <div style={{ padding: 5 }}>
+        <div style={{ padding: 5 }}>
           <DatePicker onChange={onDateChangeHandler}></DatePicker>
-        </div> */}
+        </div>
         <div >
           <Input type='text' placeholder=" Find User" style={{ width: '25%' }} required={true}
             value={UserName} onChange={UserHandler} />
@@ -144,7 +148,9 @@ const PageList = () => {
               renderItem={(item, index) => (
                 <List.Item>
                   <span style={{ float: 'left' }} >
-                    <Checkbox onChange={(e) => checkBoxHandler(item, e)}> User: {index}
+                    <Checkbox onChange={(e) => checkBoxHandler(item, e)} name={`a${index}`}
+                     checked={ isChecked[`a${index}`]}
+                    > User: {index}
                     </Checkbox>
                     <Popconfirm  title="Are you sure to delete this User?"
                       onConfirm={(e) => onConfirmDelete(e, item.id)} onCancel={onCancelDelete}
@@ -152,7 +158,7 @@ const PageList = () => {
                       <Button style={{ margin: "auto 5px" }} size='small'
                         type='ghost'>Delete</Button>
                     </Popconfirm>
-                    <Button size='small'type='link' onClick={() =>onEditHandler(item)}>Edit</Button>
+                    {/* <Button size='small'type='link' onClick={() =>onEditHandler(item)}>Edit</Button> */}
                   </span>
                   <span style={{ float: 'right' }}>
                     <Typography.Text mark>NAME: {item.name}</Typography.Text>  {'\n'} Email: {item.email}
@@ -160,7 +166,7 @@ const PageList = () => {
                 </List.Item>
               )}
             />}
-            {/* {showModel && <EditModel editUserData={editUserData} />} */}
+            {showModel && <EditModel editUserData={editUserData} setShowModel={setShowModel} />}
         </div>
         <Popconfirm title="Are you sure to delete Seleted User?"
           onConfirm={onDeleteManyHandler} onCancel={onCancelDelete}

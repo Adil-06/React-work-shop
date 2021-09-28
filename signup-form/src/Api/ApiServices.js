@@ -26,9 +26,12 @@ const deleteAPI = async (id) => {
 const deleteManyAPI = async (removeArray) => {
   return await axios.delete(`${process.env.REACT_APP_URL}`, {data: removeArray})
 }
-const putAPI = async (id, email) => {
-    return await axios.put(`${process.env.REACT_APP_URL}/${id}`, email);
-  };
+const putAPI = async (id, updatedUser) => {
+  return await axios.put(`${process.env.REACT_APP_URL}/${id}`, {data: updatedUser});
+};
+// const putAPI = async (id, email) => {
+//     return await axios.put(`${process.env.REACT_APP_URL}/${id}`, email);
+//   };
 
 export default {
     getAPI ,

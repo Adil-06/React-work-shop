@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { Button, Row, Col, Pagination, List, Typography, Input, Select, Popconfirm } from 'antd';
 import { DeleteOutlined, EditOutlined, UserOutlined, UnorderedListOutlined } from '@ant-design/icons';
-import EditEmailCard from './EditEmailCard';
 import style from './AllUserList.module.css'
+import EditModel from './EditModel';
 import SignUpApiServices from '../../Api/ApiServices'
 // import {formValidation} from '../../Validations/FormValidation'
 
@@ -11,13 +11,13 @@ const { Option } = Select;
 const AllUserList = () => {
 
   const [users, setUsers] = useState([]);
-  const [userId, setUserId] = useState('');
-  const [showEditFeild, setEditFeild] = useState(false);
   const [current, setCurrent] = useState(1)
   const [total, setTotal] = useState('');
   const [limit, setLimit] = useState(5);
   const [skip, setSkip] = useState(0);
-  const [UserName, setUserName] = useState('')
+  const [UserName, setUserName] = useState('');
+  const [showModel , setShowModel] = useState(false);
+  const [editUserData , setEditUserData] = useState([])
   const limtiSizes = [5, 8, 10];
 
   useEffect(() => {
@@ -67,21 +67,15 @@ const AllUserList = () => {
   const onCancelDelete = (e) => {
     //console.log(e)
   }
-  const EditHandler = async (id) => {
-    //console.log("EDIT:", id)
-    setUserId(id);
-    setEditFeild(true);
+  const EditHandler = async (item) => {
+    setShowModel(true)
+    setEditUserData(item)
   }
-  const EditedEmailHandler = async (id, email) => {
-    console.log(email)
-    const updatedEmail = {
-      email: email
-    }
-    await SignUpApiServices.putAPI(id, updatedEmail)
+  const EditedEmailHandler = async (id, updatedUser) => {
+    await SignUpApiServices.putAPI(id, updatedUser)
       .then(res => { console.log('updated email', res) })
       .catch(err => { console.log('error in updating email', err) })
     await getAllUser();
-    setEditFeild(false)
   }
   const getAllUser = () => {
     GetUserHandler(limit, skip, UserName);
@@ -103,7 +97,6 @@ const AllUserList = () => {
     setSkip(0)
   }
 
-
   return (
     <div className={style.mainContainer}>
       <Row justify='center'>
@@ -111,9 +104,7 @@ const AllUserList = () => {
           <h2 > <span> <UnorderedListOutlined /> </span> User List</h2>
         </Col>
         <Col>
-          <Button type='primary' size='middle' onClick={getAllUser}
-            icon={<UserOutlined />} >  Get User List
-          </Button>
+          <Button type='primary' size='middle' onClick={getAllUser} icon={<UserOutlined />}> Get User's </Button>
         </Col>
       </Row>
       <Row justify='start'>
@@ -151,7 +142,7 @@ const AllUserList = () => {
                       </Popconfirm>
                     </Col>
                     <Col span={2}>
-                      <Button type='primary' size='small' onClick={() => EditHandler(item.id)}
+                      <Button type='primary' size='small' onClick={() => EditHandler(item)}
                         icon={<EditOutlined />} > Edit</Button>
                     </Col>
                   </List.Item>
@@ -161,12 +152,9 @@ const AllUserList = () => {
             </List>
             : <div> No record found </div>
           }
-        </Col>
-        {/* for edit email */}
-        <Col span={4} offset={2}>
-          {showEditFeild &&
-            <EditEmailCard editId={userId} onEditEmail={EditedEmailHandler} />
-          }
+          {/* for edit user model */}
+          {showModel && <EditModel editUserData={editUserData} setShowModel={setShowModel} 
+          onEditEmail={EditedEmailHandler} />}
         </Col>
         {/* for pagination */}
         <Col span={16} offset={2} >
