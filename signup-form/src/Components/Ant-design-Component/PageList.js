@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Pagination, Input, Button, List, Typography, Select, Checkbox, DatePicker, Popconfirm } from 'antd'
 import SignUpApiServices from '../../Api/ApiServices';
-import EditModel from './EditModel';
+//import EditModel from './EditModel';
 
 const { Option } = Select;
 const PageList = () => {
@@ -13,10 +13,9 @@ const PageList = () => {
   const [total, setTotal] = useState('');
   const limtiSizes = [5, 8, 10];
   const [delUserArray, setDelUserArray] = useState([]);
-  const [showModel , setShowModel] = useState(false);
-  const [editUserData , setEditUserData] = useState([])
+ // const [showModel , setShowModel] = useState(false);
+  //const [editUserData , setEditUserData] = useState([])
    const [isChecked , setChecked] = useState({});
-   const [AllChecked, setAllChecked] = useState(false)
 
 
   useEffect(() => {
@@ -85,12 +84,12 @@ const PageList = () => {
     else {
       let removeId = delUserArray.filter(del => del !== item.id)
       setDelUserArray(removeId);
+      setChecked({...isChecked, [e.target.name]: false});
       console.log('checked box false', removeId);
     }
   }
 
   const onDeleteManyHandler = async () => {
-
     const removeArray = {
       delmany: delUserArray
     }
@@ -115,10 +114,10 @@ const PageList = () => {
   const onCancelDelete = (e) => {
     // console.log(e)
   }
-  const onEditHandler = (item) => {
-    setShowModel(true)
-    setEditUserData(item)
-  }
+  // const onEditHandler = (item) => {
+  //   setShowModel(true)
+  //   setEditUserData(item)
+  // }
 
   return (
     <>
@@ -148,8 +147,8 @@ const PageList = () => {
               renderItem={(item, index) => (
                 <List.Item>
                   <span style={{ float: 'left' }} >
-                    <Checkbox onChange={(e) => checkBoxHandler(item, e)} name={`a${index}`}
-                     checked={ isChecked[`a${index}`]}
+                    <Checkbox onChange={(e) => checkBoxHandler(item, e)} name={item.id}
+                     checked={ isChecked[item.id]}
                     > User: {index}
                     </Checkbox>
                     <Popconfirm  title="Are you sure to delete this User?"
@@ -166,7 +165,7 @@ const PageList = () => {
                 </List.Item>
               )}
             />}
-            {showModel && <EditModel editUserData={editUserData} setShowModel={setShowModel} />}
+            {/* {showModel && <EditModel editUserData={editUserData} setShowModel={setShowModel} />} */}
         </div>
         <Popconfirm title="Are you sure to delete Seleted User?"
           onConfirm={onDeleteManyHandler} onCancel={onCancelDelete}
