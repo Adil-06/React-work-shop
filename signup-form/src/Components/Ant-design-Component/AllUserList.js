@@ -101,8 +101,8 @@ const AllUserList = () => {
       arr.push(item.id)
       setDelMultiUser([...arr]);
       setChecked({ ...isChecked, [e.target.name]: e.target.checked });
-      console.log('checked box true', delMultiUser, e.target)
-      console.log('check', isChecked);
+     // console.log('checked box true', delMultiUser, e.target)
+      //console.log('check', isChecked);
     }
     else {
       let removeId = delMultiUser.filter(del => del !== item.id)
@@ -115,7 +115,7 @@ const AllUserList = () => {
     const removeArray = {
       delmany: delMultiUser
     }
-    console.log("delete users list ", removeArray);
+    //console.log("delete users list ", removeArray);
     await SignUpApiServices.deleteManyAPI(removeArray)
       .then(res => { console.log('response of delete many', res) })
       .catch(err => { console.log('error in delete many', err.message) });

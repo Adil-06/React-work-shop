@@ -4,11 +4,10 @@ import dotenv from 'dotenv'
 dotenv.config();
 console.log(`api  ${ process.env.REACT_APP_URL }`)
 
-//const api = 'http://localhost:4000'
 const getAPI = async () =>  {
   return await axios.get(`${process.env.REACT_APP_URL}`);
 }
-// fetch(`/api/users?limit=${limit}&skip=${skip}`)
+
  const getUsers = async (limit , skip, name) => {
    return await axios.get(`${process.env.REACT_APP_URL}/users?limit=${limit}&skip=${skip}&name=${name}`);
  }

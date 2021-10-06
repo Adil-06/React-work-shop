@@ -10,14 +10,13 @@ const EditModel = (props) => {
   const [isModalVisible, setIsModalVisible] = useState(true);
   const [editName, setEditName] = useState(userData.name);
   const [editEmail, setEditEmail] = useState(userData.email);
-  const id = userData.id
-
-
+  const id = userData._id
+  // for redux crud userData._id otherwise userData.id
   const onFormSubmit = async (values) => {
     const formIsValid = await editformValidation.isValid(values);
 
     if (formIsValid) {
-      console.log(values);
+      //console.log(values);
       const updatedUser = {
         name: values.name,
         email: values.email
