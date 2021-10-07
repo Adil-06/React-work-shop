@@ -4,7 +4,7 @@ import { DeleteOutlined, EditOutlined, UserOutlined, UnorderedListOutlined } fro
 import style from './AllUserList.module.css'
 import EditModel from './EditModel';
 import SignUpApiServices from '../../Api/ApiServices'
-// import {formValidation} from '../../Validations/FormValidation'
+
 
 const { Option } = Select;
 
@@ -38,7 +38,7 @@ const AllUserList = () => {
             email: resData[key].email
           })
         }
-        console.log('total user', res.data.total)
+       // console.log('total user', res.data.total)
         setTotal(res.data.total);
         setUsers(fetchUserData);
         //console.log('pagination list users: ', fetchUserData)

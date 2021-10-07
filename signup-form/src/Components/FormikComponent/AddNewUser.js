@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { Formik } from 'formik';
 import { Button } from 'antd';
 import { Form, Input } from 'formik-antd';
-import 'antd/dist/antd.css';
 import { formValidation } from '../../Validations/FormValidation'
-//import SignUpApiServices from '../../Api/ApiServices'
 import { useDispatch } from 'react-redux';
 import { postNewUserAsync } from '../../store/userSlice';
+import 'antd/dist/antd.css';
+import './AddNewForm.css'
 
 const AddNewUser = () => {
 
@@ -40,7 +40,7 @@ const AddNewUser = () => {
     setUserPassword(e.target.value);
   }
   return (
-    <div style={{ marginTop: 5 }}>
+    <div className='addNewUserForm'>
 
       <Formik initialValues={{ name: '', email: '', password: '' }}
         onSubmit={(values , {resetForm}) => onFormSubmit(values , {resetForm})}
@@ -48,7 +48,7 @@ const AddNewUser = () => {
          >
         {(errors, touched) => {
           return (
-            <Form style={{ width: '30%', margin: " 10px auto" }} >
+            <Form style={{ width: '50%', margin: " 10px auto" }} >
               <Form.Item label="Name" name="name"    >
                 <Input name='name' placeholder='User Name'
                   value={userName} onChange={onNameChange} />
