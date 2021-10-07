@@ -5,6 +5,7 @@ import { Form, Input } from 'formik-antd';
 import { formValidation } from '../../Validations/FormValidation'
 import { useDispatch } from 'react-redux';
 import { postNewUserAsync } from '../../store/userSlice';
+import { STRING_CONST } from '../../StringConstants';
 import 'antd/dist/antd.css';
 import './AddNewForm.css'
 
@@ -50,19 +51,19 @@ const AddNewUser = () => {
           return (
             <Form style={{ width: '50%', margin: " 10px auto" }} >
               <Form.Item label="Name" name="name"    >
-                <Input name='name' placeholder='User Name'
+                <Input name='name' placeholder={STRING_CONST.USER_NAME}
                   value={userName} onChange={onNameChange} />
                 {errors.name && touched.name ? (<span>{errors.name}</span>) : null}
               </Form.Item>
 
               <Form.Item label="Email" name="email"  >
-                <Input name='email' placeholder='User Email'
+                <Input name='email' placeholder={STRING_CONST.USER_EMAIL}
                   value={userEmail} onChange={onEmailChange} />
                 {errors.email && touched.email ? (<span>{errors.email}</span>) : null}
               </Form.Item>
 
               <Form.Item label="Password" name="password" >
-                <Input.Password name='password' placeholder='User Password'
+                <Input.Password name='password' placeholder= {STRING_CONST.USER_PASSWORD}
                   value={userPassword} onChange={onPasswordChange} />
                 {errors.password && touched.password ? (<span>{errors.password}</span>) : null}
               </Form.Item>
