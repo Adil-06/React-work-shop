@@ -1,5 +1,6 @@
 const UserSignUp = require('../models/SignupModel')
 const bcrypt = require('bcryptjs');
+const { formValidation, userUpdateValidation } = require('../Validations/userValidation')
 
 module.exports = {
   hello() {
@@ -24,33 +25,49 @@ module.exports = {
     const name = args.name;
     const email = args.email;
     const password = args.password
-    const cryptedPassword = await bcrypt.hash(password, 5);
-    const postNewUser = new UserSignUp({
+    const newUser = {
       name,
       email,
-      password: cryptedPassword
-    });
-    const newlyCreatedUser = await postNewUser.save();
-    //console.log('user created')     
-    return newlyCreatedUser;
+      password
+    }
+    const userIsValidat = await formValidation.isValid(newUser);
+    if (userIsValidat) {
+      const cryptedPassword = await bcrypt.hash(password, 5);
+      const postNewUser = new UserSignUp({
+        name,
+        email,
+        password: cryptedPassword
+      });
+      const newlyCreatedUser = await postNewUser.save();
+      //console.log('user created')     
+      return newlyCreatedUser;
+    }
+    const error = new Error("User data is not valid");
+    return error
+
   },
   updateUser: async (args, req, res) => {
     const id = args.id;
     const name = args.name;
     const email = args.email;
-    const updatedUser = await UserSignUp.findByIdAndUpdate({ _id: id },
-      { $set: { name: name, email: email } },
-      { new: true });
-    await updatedUser.save();
-    return updatedUser;
+    const updatedValidation = await userUpdateValidation.isValid({ name, email })
+    if (updatedValidation) {
+      const updatedUser = await UserSignUp.findByIdAndUpdate({ _id: id },
+        { $set: { name: name, email: email } },
+        { new: true });
+      await updatedUser.save();
+      return updatedUser;
+    }
+    const error = new Error("User updated data is not valid");
+    return error
   },
-  deleteUser : async (args) => {
+  deleteUser: async (args) => {
     const id = args.id;
     const userToDelete = await UserSignUp.findById(id);
-    if(id.match(userToDelete._id)) {
+    if (id.match(userToDelete._id)) {
       const removedUser = await userToDelete.remove();
-     return removedUser;
-    } 
+      return removedUser;
+    }
     const error = new Error("User not found");
     throw error
   }
