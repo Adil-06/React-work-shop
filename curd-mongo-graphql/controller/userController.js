@@ -5,7 +5,7 @@ const bcrypt = require('bcryptjs');
 
 exports.get_Users = async (req, res) => {
     try {
-        const allUsers = await User.find()
+        const allUsers = await User.find({},{__v:0, _id:0, token:0}).limit(3)
 
         res.status(200).send(allUsers)
     }

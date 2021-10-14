@@ -18,3 +18,35 @@ export const CREATE_USER = gql`
    }
 
 `
+export const UPDATE_USER = gql `
+    mutation updateUser (
+      $id: ID!
+      $name: String!
+      $email: String!
+    ) 
+    {
+      updateUser (
+        id: $id
+        name: $name
+        email: $email
+      )
+      {
+        name
+        email
+      }
+    }
+
+`
+
+export const DELETE_USER = gql`
+       mutation deleteUser(
+           $id: ID!
+        )
+        {
+          deleteUser( id: $id) {
+            name
+            email
+          }
+        }
+
+`
