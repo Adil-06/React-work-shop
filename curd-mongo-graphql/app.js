@@ -11,6 +11,7 @@ const graphqlResolvers = require('./graphql/resolvers');
 const authRouter = require('./routes/authRoutes');
 const publishRoutes = require('./routes/publisherRoutes')
 const bookRoutes = require('./routes/bookRoutes')
+const orderRouter = require('./routes/orderRoutes')
 
 const signupRoute = require('./routes/userRoutes')
 
@@ -34,7 +35,7 @@ app.use(express.json());
 app.use('/api/user', authRouter);
 app.use('/api', publishRoutes)
 app.use('/api', bookRoutes);
-
+app.use('/', orderRouter);
 //for signup users
 app.use('/', signupRoute);
 
