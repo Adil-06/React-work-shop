@@ -3,13 +3,14 @@ const Order = require('../models/order');
 exports.getAllOrders = async (req, res) => {
 
   try {
-    const allOrderList = await Order.find({},
-      { _id: 0, date: 1, status: 1, productName: 1, customerName: 1 })
+    const allOrderList = await Order.aggregate([{ $project:{date: 1, status: 1,  productName: 1, customerName: 1, productPrice:1}},
+      { $sort: { customerName: 1 } }])
     await res.status(200).send(allOrderList);
+    //{ _id: 0, date: 1, status: 1,  productName: 1, customerName: 1, productPrice:1 }
   }
   catch (err) {
     await res.status(404).send(err)
-    console.log('error in getting all order', err)
+    console.log('error in getting all order =', err.message)
   }
 }
 exports.postNewOrder = async (req, res, next) => {
@@ -49,7 +50,7 @@ exports.getFilterCustomer = async (req, res, next) => {
     if (name) {
       //const filterCust = await Order.find({customerName: name}, {createdAt:0,__v:0, updatedAt:0});
       const filterCust = await Order.aggregate([ { $project: {createdAt:0 , updatedAt:0 , __v:0} }
-        ,{ $match: { customerName: name } }]);
+        ,{ $match: { customerName: name } }, { $group : {_id :"$customerName", totalPrice: {$sum:"$productPrice"} } }]);
       await res.status(200).send(filterCust);
     }
     else {
