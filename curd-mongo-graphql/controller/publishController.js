@@ -50,7 +50,6 @@ exports.publishPost = async (req, res) => {
   })
   try {
     const savedPublisher = await publish.save();
-    //res.status(201).json({success:true, data: savedPublisher })
     res.status(200).send(savedPublisher);
     console.log('publisher created');
 
