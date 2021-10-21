@@ -26,10 +26,10 @@ exports.postProduct = async (req, res) => {
         description : description,
         date : new Date().toLocaleDateString()
       });
-      addNewProduct.customer = customerData._id;
+      addNewProduct.customerID = customerData._id;
       await addNewProduct.save();
 
-      const getCustomer = await Customer.findById({_id: addNewProduct.customer});
+      const getCustomer = await Customer.findById({_id: addNewProduct.customerID});
       await getCustomer.productIds.push(addNewProduct);
       await getCustomer.save();
 

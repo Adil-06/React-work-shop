@@ -13,7 +13,7 @@ const productSchema = mongoose.Schema({
       type: String,
       require: true
     },
-    customer : {
+    customerID : {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Customer'
     }
