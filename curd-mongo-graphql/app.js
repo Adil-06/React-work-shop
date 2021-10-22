@@ -9,13 +9,14 @@ const graphqlSchema = require('./graphql/schema');
 const graphqlResolvers = require('./graphql/resolvers');
 
 const authRouter = require('./routes/authRoutes');
-const publishRoutes = require('./routes/publisherRoutes')
-const bookRoutes = require('./routes/bookRoutes')
-const orderRouter = require('./routes/orderRoutes')
+const publishRoutes = require('./routes/publisherRoutes');
+const bookRoutes = require('./routes/bookRoutes');
+const orderRouter = require('./routes/orderRoutes');
 const productRoute = require('./routes/productRoutes');
-const customerRoute = require ('./routes/customerRoutes')
+const customerRoute = require ('./routes/customerRoutes');
+const inventoryRoutes = require('./routes/inventoryRoutes');
 
-const signupRoute = require('./routes/userRoutes')
+const signupRoute = require('./routes/userRoutes');
 
 
 const app = express();
@@ -40,6 +41,7 @@ app.use('/api', bookRoutes);
 app.use('/', orderRouter);
 app.use('/', productRoute);
 app.use('/', customerRoute);
+app.use('/', inventoryRoutes);
 //for signup users
 app.use('/', signupRoute);
 
