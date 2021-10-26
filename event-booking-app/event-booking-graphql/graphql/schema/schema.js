@@ -7,6 +7,7 @@ type Event {
     description: String!
     price: Float!
     date: String!
+    creator: User!
 }
 
 type User {
@@ -14,6 +15,7 @@ type User {
   email: String!
   name: String
   password:String
+  createdEvent : [Event!]
 }
 
 input EventInput {
@@ -21,6 +23,7 @@ input EventInput {
    description: String!
    price: Float!
    date: String!
+   userEmail: String
 }
 input UserInput {
   email: String!

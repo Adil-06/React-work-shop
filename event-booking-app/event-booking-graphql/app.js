@@ -5,8 +5,8 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 
 const graphqlHttp = require('express-graphql');
-const graphqlSchema = require('./graphql/schema');
-const graphqlResolver = require('./graphql/resolvers');
+const graphqlSchema = require('./graphql/schema/schema');
+const graphqlResolver = require('./graphql/resolver/resolvers');
 
 const app = express();
 
