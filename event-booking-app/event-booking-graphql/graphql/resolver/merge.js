@@ -11,6 +11,18 @@ const transformEvent = event => {
 	}
 }
 
+const transformBooking = booking => {
+  return {
+    ...booking._doc,
+    _id: booking.id,
+    user: getUserData.bind(this, booking._doc.user),
+    event: singleEvent.bind(this, booking._doc.event),
+    createdAt: dateToString(booking._doc.createdAt),
+    updatedAt: dateToString(booking._doc.updatedAt)
+  }
+}
+
+
 const getEventsData = async (eventIds) => {
 	try {
 		const fetchEvent = await Event.find({ _id: { $in: eventIds } });
@@ -53,3 +65,5 @@ const getUserData = async (userID) => {
 exports.getUserData = getUserData;
 exports.singleEvent = singleEvent;
 exports.getEventsData = getEventsData;
+exports.transformEvent = transformEvent;
+exports.transformBooking = transformBooking;

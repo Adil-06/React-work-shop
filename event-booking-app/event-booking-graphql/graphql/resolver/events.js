@@ -1,16 +1,9 @@
 const Event = require('../../models/event');
 const User = require('../../models/user');
 const { dateToString } = require('../helper/date');
-const {getUserData} = require('./merge');
+const { transformEvent} = require('./merge');
 
-const transformEvent = event => {
-  return {
-    ...event._doc,
-    _id: event.id,
-    date: dateToString(event._doc.date),
-    creator: getUserData.bind(this, event.creator)
-  }
-}
+
 
 module.exports = {
   events: async () => {
@@ -25,7 +18,10 @@ module.exports = {
       throw err
     }
   },
-  createEvent: async (args) => {
+  createEvent: async (args ,req) => {
+    if(!req.isAuth) {
+      throw new Error("Unauthenticated")
+    }
     try {
       const uEmail = args.eventInput.userEmail;
       const userByEmail = await User.findOne({ email: uEmail });
